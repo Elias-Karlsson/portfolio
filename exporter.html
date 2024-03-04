@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Playlist Descriptions</title>
+    <script>
+        function fetchPlaylist() {
+            const playlistId = document.getElementById('playlistId').value;
+            const apiKey = 'AIzaSyDLVP2nt_mgHLXsotR1l-BI1k7OffK7Elw'; // Replace with your actual API key
+            const apiUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${apiKey}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => displayResults(data))
+                .catch(error => console.error('Error:', error));
+        }
+
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            data.items.forEach(item => {
+                const videoTitle = item.snippet.title;
+                const videoDescription = item.snippet.description;
+                const videoElement = `<h3>${videoTitle}</h3><p>${videoDescription}</p>`;
+                resultsContainer.innerHTML += videoElement;
+            });
+			
+        }
+    </script>
+</head>
+<body>
+    <h1>YouTube Playlist Descriptions Extractor</h1>
+    <input type="text" id="playlistId" placeholder="Enter Playlist ID">
+    <button onclick="fetchPlaylist()">Fetch Descriptions</button>
+    <div id="results"></div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Playlist Availability Checker</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  ul { max-height: 300px; overflow-y: scroll; }
+  li { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <h1>Check Playlist Availability</h1>
+  
+  <label for="playlistId">Enter YouTube Playlist ID:</label>
+  <input type="text" id="playlistId" placeholder="Enter Playlist ID">
+
+  <label for="country">Choose a country:</label>
+  <select id="country">
+    <option value="USA">USA</option>
+    <option value="UK">UK</option>
+    <option value="Netherlands">Netherlands</option>
+    <!-- Add other countries as needed -->
+  </select>
+  <button onclick="checkAvailability()">Check Availability</button>
+  <ul id="results"></ul>
+
+<script>
+// Dummy API keys - replace with your actual keys
+const youtubeKey = "AIzaSyDLVP2nt_mgHLXsotR1l-BI1k7OffK7Elw";
+const discogsKey = "dOqLEzunKNWwkBaWDdxTyzjIoTrLfczHQjMZCsZj";
+
+function getYouTubePlaylist(playlistId) {
+  const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${youtubeKey}`;
+  return fetch(url).then(response => response.json());
+}
+
+function checkDiscogs(title, country) {
+  const encodedTitle = encodeURIComponent(title);
+  const url = `https://api.discogs.com/database/search?release_title=${encodedTitle}&country=${country}&token=${discogsKey}`;
+  return fetch(url).then(response => response.json());
+}
+
+function createDiscogsLink(title, country) {
+  const encodedTitle = encodeURIComponent(title);
+  return `https://www.discogs.com/search/?q=${encodedTitle}&country_exact=${country}`;
+}
+
+async function checkAvailability() {
+  const playlistId = document.getElementById('playlistId').value;
+  const country = document.getElementById('country').value;
+  const resultsElement = document.getElementById('results');
+  resultsElement.innerHTML = '<li>Loading...</li>';
+
+  if (!playlistId.trim()) {
+    resultsElement.innerHTML = '<li>Please enter a valid YouTube Playlist ID.</li>';
+    return;
+  }
+
+  try {
+    const playlist = await getYouTubePlaylist(playlistId);
+    resultsElement.innerHTML = ''; // Clear previous results
+
+    for (const item of playlist.items) {
+      const title = item.snippet.title;
+      const discogsResult = await checkDiscogs(title, country);
+      if (discogsResult.results.length > 0) {
+        const link = createDiscogsLink(title, country);
+        resultsElement.innerHTML += `<li>${title}: Available - <a href="${link}" target="_blank">View on Discogs</a></li>`;
+      }
+    }
+
+    if (!resultsElement.innerHTML) {
+      resultsElement.innerHTML = '<li>No available titles found in the selected country.</li>';
+    }
+
+  } catch(error) {
+    resultsElement.innerHTML = '<li>Error loading data. Please check console for details.</li>';
+    console.error(error);
+  }
+}
+</script>
+</body>
+</html>
+  

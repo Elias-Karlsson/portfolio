@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>no context</title>
+</head>
+	<style> body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* This sets the background color of the entire page */
+  
+ 
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 400px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: #222;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 2;
+  }</style>
+<body>
+    <h1>no context quote</h1>
+    <button id="generate">Generate </button>
+    <p id="quotation"></p>
+
+    <script>
+        document.getElementById('generate').addEventListener('click', function() {
+            fetch('texter/merged.txt')
+                .then(response => response.text())
+                .then(text => {
+                    const quotations = text.split(/\n\s*\n/);
+                    const randomQuotation = quotations[Math.floor(Math.random() * quotations.length)];
+                    document.getElementById('quotation').textContent = randomQuotation;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
