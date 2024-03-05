@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeopardy Game</title>
+<style>
+    #jeopardyBoard {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+    }
+
+    .category, .question {
+        text-align: center;
+        padding: 20px;
+        color: #FFFFFF;
+    }
+
+    .category {
+        background-color: #1E90FF;
+    }
+
+    .question {
+        background-color: #ADD8E6;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div id="jeopardyBoard">
+    <div class="category">Category 1</div>
+    <div class="category">Category 2</div>
+    <div class="category">Category 3</div>
+    <div class="category">Category 4</div>
+    <div class="category">Category 5</div>
+
+    <!-- Questions for Category 1 -->
+     <div class="question" data-question="What is the capital of Spain?" data-answer="Madrid" data-state="default" data-value="100">100</div>
+    <div class="question" data-question="Question 1-2" data-answer="Answer 1-2">200</div>
+    <div class="question" data-question="Question 1-3" data-answer="Answer 1-3">300</div>
+    <div class="question" data-question="Question 1-4" data-answer="Answer 1-4">400</div>
+    <div class="question" data-question="Question 1-5" data-answer="Answer 1-5">500</div>
+
+    <!-- Questions for Category 2 -->
+    <div class="question" data-question="Question 2-1" data-answer="Answer 2-1">100</div>
+    <div class="question" data-question="Question 2-2" data-answer="Answer 2-2">200</div>
+    <div class="question" data-question="Question 2-3" data-answer="Answer 2-3">300</div>
+    <div class="question" data-question="Question 2-4" data-answer="Answer 2-4">400</div>
+    <div class="question" data-question="Question 2-5" data-answer="Answer 2-5">500</div>
+
+    <!-- Questions for Category 3 -->
+    <div class="question" data-question="Question 3-1" data-answer="Answer 3-1">100</div>
+    <div class="question" data-question="Question 3-2" data-answer="Answer 3-2">200</div>
+    <div class="question" data-question="Question 3-3" data-answer="Answer 3-3">300</div>
+    <div class="question" data-question="Question 3-4" data-answer="Answer 3-4">400</div>
+    <div class="question" data-question="Question 3-5" data-answer="Answer 3-5">500</div>
+
+    <!-- Questions for Category 4 -->
+    <div class="question" data-question="Question 4-1" data-answer="Answer 4-1">100</div>
+    <div class="question" data-question="Question 4-2" data-answer="Answer 4-2">200</div>
+    <div class="question" data-question="Question 4-3" data-answer="Answer 4-3">300</div>
+    <div class="question" data-question="Question 4-4" data-answer="Answer 4-4">400</div>
+    <div class="question" data-question="Question 4-5" data-answer="Answer 4-5">500</div>
+
+    <!-- Questions for Category 5 -->
+    <div class="question" data-question="Question 5-1" data-answer="Answer 5-1">100</div>
+    <div class="question" data-question="Question 5-2" data-answer="Answer 5-2">200</div>
+    <div class="question" data-question="Question 5-3" data-answer="Answer 5-3">300</div>
+    <div class="question" data-question="Question 5-4" data-answer="Answer 5-4">400</div>
+    <div class="question" data-question="Question 5-5" data-answer="Answer 5-5">500</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const questions = document.querySelectorAll('.question');
+
+    questions.forEach(question => {
+        question.addEventListener('click', () => {
+            const state = question.getAttribute('data-state');
+
+            switch(state) {
+                case 'default':
+                    // Show the question and change state to 'question'
+                    question.textContent = question.dataset.question;
+                    question.setAttribute('data-state', 'question');
+                    break;
+                case 'question':
+                    // Show the answer and change state to 'answer'
+                    question.textContent = question.dataset.answer;
+                    question.setAttribute('data-state', 'answer');
+                    break;
+                case 'answer':
+                    // Reset to the default state
+                    question.textContent = question.dataset.value;
+                    question.setAttribute('data-state', 'default');
+                    break;
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
